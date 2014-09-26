@@ -9,6 +9,7 @@ public class SpawnStuff : MonoBehaviour {
 	public float spreadX = 1;
 	public float spreadY = 1;
 	public float spreadZ = 1;
+	public bool randomRotation = false;
 
 	private int objCount;
 	private float spawnTime;
@@ -35,7 +36,14 @@ public class SpawnStuff : MonoBehaviour {
 			Vector3 ownPos = transform.position;
 			Vector3 spawnPos = new Vector3(ownPos.x + Random.Range(spreadX * -10, spreadX * 10) / 10, ownPos.y, ownPos.z  + Random.Range(spreadZ * -10, spreadZ * 10) / 10);
 			objCount++;
-			Instantiate(spawnObject, spawnPos, Random.rotation);
+			if (randomRotation)
+			{
+				Instantiate(spawnObject, spawnPos, Random.rotation);
+			}
+			else
+			{
+				Instantiate(spawnObject, spawnPos, Quaternion.identity);
+			}
 		}
 	}
 }
