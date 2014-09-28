@@ -15,7 +15,7 @@ public class SpawnStuff : MonoBehaviour {
 	private float spawnTime;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		objCount = 0;
 		spawnTime = Time.time + spawnTime;
 		if (spawnObject == null)
@@ -42,7 +42,7 @@ public class SpawnStuff : MonoBehaviour {
 			}
 			else
 			{
-				Instantiate(spawnObject, spawnPos, Quaternion.identity);
+				Instantiate(spawnObject, spawnPos, transform.rotation);
 			}
 		}
 	}

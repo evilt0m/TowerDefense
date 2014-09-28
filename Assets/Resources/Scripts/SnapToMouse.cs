@@ -48,7 +48,7 @@ public class SnapToMouse : MonoBehaviour {
 
 	void OnTriggerStay(Collider other)
 	{
-		Debug.Log("Collision: "+other);
+		//Debug.Log("Collision: "+other);
 		if (picked && other.gameObject.tag == "Building")
 		{
 			buildingMesh.renderer.material = blockedMat;

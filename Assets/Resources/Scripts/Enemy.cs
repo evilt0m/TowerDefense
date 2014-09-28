@@ -5,9 +5,13 @@ public class Enemy : MonoBehaviour {
 
 
 	public float speed = 10f;
+	public float traction = 2f;
 
 	public float health;
 	public float maxHealth;
+
+	public GameObject turret;
+
 	private float adjustment = 2.9f;
 	private Vector3 worldPosition;
 	private Vector3 screenPosition;
@@ -22,6 +26,7 @@ public class Enemy : MonoBehaviour {
 	private GameObject[] waypoints;
 	private int currentWaypoint;
 	private int waypointLength;
+	private bool grounded;
 
 	// Use this for initialization
 	void Awake () {
@@ -45,7 +50,7 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//hack
-		health -= Time.deltaTime * 10;
+		//health -= Time.deltaTime * 10;
 
 		if (health < 0)
 		{
@@ -62,16 +67,93 @@ public class Enemy : MonoBehaviour {
 
 		Vector3 nextWaypoint = waypoints[currentWaypoint + 1].transform.position;
 
-		Quaternion newRotation = Quaternion.LookRotation(nextWaypoint - transform.position, Vector3.up);
-		transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10f);
+		//rotate turret
+		if (turret != null)
+		{
+			turret.transform.LookAt(nextWaypoint);
+		}
 		
-		transform.position = Vector3.MoveTowards(transform.position, nextWaypoint, speed * Time.deltaTime);
+		//old non physics movement
+		//transform.position = Vector3.MoveTowards(transform.position, nextWaypoint, speed * Time.deltaTime);
+
+
+
+		Vector3 normForward = transform.forward.normalized;
+		Vector3 velocity = rigidbody.velocity;
+		Vector3 pointToMirror = normForward * Vector3.Dot(normForward, velocity);
+		Vector3 newDir = pointToMirror + pointToMirror - velocity;
+
+
+
 		//distance check
 		float distanceToTarget = Vector3.Distance(transform.position, nextWaypoint);
-		if (distanceToTarget < 0.1f)
+
+		//only if on ground
+		if (grounded)
+		{
+
+			Vector3 directionVector = newDir + transform.forward;
+
+			//check if target is in front
+			Vector3 target = nextWaypoint - transform.position;
+
+
+
+			float rotationSpeed = 10 * (1 - (Mathf.Clamp(velocity.magnitude / speed, 0.4f, 0.8f)));
+
+
+			//rotate tank
+			Quaternion newRotation = Quaternion.LookRotation(nextWaypoint - transform.position, Vector3.up);
+			transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 4f);
+
+
+			//break if drifting too hard
+			float angle = Vector3.Angle(normForward, target);
+			Vector3 breakVector = -rigidbody.velocity.normalized * angle / 10f;
+
+			//add speed if away from waypoint
+			if (velocity.magnitude < speed && distanceToTarget >= 2.5f)
+			{
+				rigidbody.AddForce(normForward.normalized * speed, ForceMode.Acceleration);
+			}
+
+
+
+
+			Debug.DrawRay(transform.position + Vector3.up, normForward.normalized * 4, Color.red);
+			Debug.DrawRay(transform.position + Vector3.up, velocity.normalized * 4, Color.green);
+			Debug.DrawRay(transform.position + Vector3.up, directionVector.normalized * 4, Color.yellow);
+			Debug.DrawRay(transform.position + Vector3.up, breakVector, Color.blue);
+			Debug.DrawRay(transform.position + Vector3.up, target, Color.magenta);
+
+			Vector3 rightVel = transform.right * Vector3.Dot(rigidbody.velocity, transform.right);
+			Debug.DrawRay(transform.position + Vector3.up, rightVel, Color.white);
+
+			rigidbody.AddForce(-rightVel * traction, ForceMode.Force);
+			//rigidbody.AddForce(breakVector, ForceMode.Acceleration);
+		}
+
+		if (distanceToTarget < 2.5f)
 		{
 			currentWaypoint++;
+
+
 		} 
+	}
+
+	void OnCollisionStay(Collision other)
+	{
+		if (other.gameObject.name == "Terrain")
+		{
+			grounded = true;
+		}
+	}
+	void OnCollisionExit(Collision other)
+	{
+		if (other.gameObject.name == "Terrain")
+		{
+			grounded = false;
+		}
 	}
 
 	void OnGUI()
