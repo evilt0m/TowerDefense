@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour {
 	public float health;
 	public float maxHealth;
 
+	public GameObject tank;
 	public GameObject turret;
 
 	private float adjustment = 2.9f;
@@ -27,9 +28,13 @@ public class Enemy : MonoBehaviour {
 	private int currentWaypoint;
 	private int waypointLength;
 	private bool grounded;
+	private bool isDead;
+
+	private Material deadMaterial;
 
 	// Use this for initialization
 	void Awake () {
+		deadMaterial = Resources.Load("Models/Materials/Dead") as Material;
 		barTexture = Resources.Load("Textures/healthbar") as Texture;
 		barBackTexture = Resources.Load("Textures/black") as Texture;
 		myTransform = transform;
@@ -52,9 +57,17 @@ public class Enemy : MonoBehaviour {
 		//hack
 		//health -= Time.deltaTime * 10;
 
-		if (health < 0)
+		if (health <= 0)
 		{
-			Destroy(gameObject);
+			if (!isDead)
+			{
+				isDead = true;
+				gameObject.tag = "Untagged";
+				tank.renderer.material = deadMaterial;
+				turret.renderer.material = deadMaterial;
+				turret.transform.GetChild(0).renderer.material = deadMaterial;
+			}
+			return;
 		}
 		if (currentWaypoint >= waypointLength - 1)
 		{
@@ -68,9 +81,10 @@ public class Enemy : MonoBehaviour {
 		Vector3 nextWaypoint = waypoints[currentWaypoint + 1].transform.position;
 
 		//rotate turret
+
 		if (turret != null)
 		{
-			turret.transform.LookAt(nextWaypoint);
+
 		}
 		
 		//old non physics movement
@@ -103,7 +117,9 @@ public class Enemy : MonoBehaviour {
 
 
 			//rotate tank
-			Quaternion newRotation = Quaternion.LookRotation(nextWaypoint - transform.position, Vector3.up);
+			Vector3 lookAtPos = nextWaypoint;
+			lookAtPos.y = transform.position.y;
+			Quaternion newRotation = Quaternion.LookRotation(lookAtPos - transform.position, Vector3.up);
 			transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 4f);
 
 
@@ -118,19 +134,20 @@ public class Enemy : MonoBehaviour {
 			}
 
 
+			Vector3 rightVel = transform.right * Vector3.Dot(rigidbody.velocity, transform.right);
 
 
+			rigidbody.AddForce(-rightVel * traction, ForceMode.Force);
+
+			//funny lines
+			/*
 			Debug.DrawRay(transform.position + Vector3.up, normForward.normalized * 4, Color.red);
 			Debug.DrawRay(transform.position + Vector3.up, velocity.normalized * 4, Color.green);
 			Debug.DrawRay(transform.position + Vector3.up, directionVector.normalized * 4, Color.yellow);
 			Debug.DrawRay(transform.position + Vector3.up, breakVector, Color.blue);
 			Debug.DrawRay(transform.position + Vector3.up, target, Color.magenta);
-
-			Vector3 rightVel = transform.right * Vector3.Dot(rigidbody.velocity, transform.right);
 			Debug.DrawRay(transform.position + Vector3.up, rightVel, Color.white);
-
-			rigidbody.AddForce(-rightVel * traction, ForceMode.Force);
-			//rigidbody.AddForce(breakVector, ForceMode.Acceleration);
+			*/
 		}
 
 		if (distanceToTarget < 2.5f)
@@ -156,8 +173,15 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	public void AddDamage(float damage)
+	{
+		health -= damage;
+	}
+
 	void OnGUI()
 	{
+		if (health <= 0)
+			return;
 		worldPosition = new Vector3(myTransform.position.x, myTransform.position.y + adjustment, myTransform.position.z);
 		screenPosition = myCam.WorldToScreenPoint(worldPosition);
 

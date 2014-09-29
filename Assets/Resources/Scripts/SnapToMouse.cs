@@ -8,19 +8,24 @@ public class SnapToMouse : MonoBehaviour {
 	private bool picked = false;
 	private bool blocked = false;
 
+	private Tower towerScript;
+
 	private Material defaultMat, pickedMat, blockedMat;
 
 	private GameObject buildingMesh;
+	private Projector rangeProjector;
 
 	private ModeControl modeControl;
 
 	// Use this for initialization
 	void Awake () {
 		groundPlane = new Plane(Vector3.up, Vector3.zero);
-		defaultMat = Resources.Load("Models/Materials/Default") as Material;
+		defaultMat = Resources.Load("Models/Materials/MetalBase") as Material;
 		pickedMat = Resources.Load("Models/Materials/Picked") as Material;
 		blockedMat = Resources.Load("Models/Materials/Blocked") as Material;
 		buildingMesh = transform.GetChild(0).gameObject;
+		rangeProjector = GetComponentInChildren<Projector>();
+		towerScript = GetComponent<Tower>();
 
 		modeControl = GameObject.Find("GameController").GetComponent<ModeControl>();
 		if (modeControl == null)
@@ -75,19 +80,25 @@ public class SnapToMouse : MonoBehaviour {
 			}
 			else
 			{
+				rangeProjector.enabled = false;
 				modeControl.SetBuildMode(false);
 				buildingMesh.animation.Play("BuildingPlace");
 				picked = false;
 				buildingMesh.renderer.material = defaultMat;
+				buildingMesh.collider.enabled = true;
+				towerScript.ActivateTower(true);
 			}
 		}
 		else
 		{
 			if (modeControl.GetBuildMode() == false)
 			{
+				rangeProjector.enabled = true;
 				modeControl.SetBuildMode(true);
 				picked = true;
 				buildingMesh.renderer.material = pickedMat;
+				buildingMesh.collider.enabled = false;
+				towerScript.ActivateTower(false);
 			}
 		}
 	}
@@ -95,6 +106,9 @@ public class SnapToMouse : MonoBehaviour {
 	public void SetPicked()
 	{
 		picked = true;
+		rangeProjector.enabled = true;
 		buildingMesh.renderer.material = pickedMat;
+		buildingMesh.collider.enabled = false;
+		towerScript.ActivateTower(false);
 	}
 }

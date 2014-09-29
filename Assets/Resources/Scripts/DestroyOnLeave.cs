@@ -5,7 +5,7 @@ public class DestroyOnLeave : MonoBehaviour {
 
 	void OnTriggerExit(Collider other)
 	{
-		if (other.tag == "Particle")
+		if (other.tag == "Projectile")
 		{
 			Destroy(other.gameObject);
 		}
