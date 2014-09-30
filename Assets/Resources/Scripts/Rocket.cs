@@ -21,7 +21,7 @@ public class Rocket : MonoBehaviour {
 		if (target == null)
 			return;
 
-		Quaternion newRotation = Quaternion.LookRotation(target.transform.position + Vector3.up / 2 - transform.position);
+		Quaternion newRotation = Quaternion.LookRotation(target.transform.position - transform.position);
 		transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10f);
 		transform.position += transform.forward * Time.deltaTime * 20f;
 
@@ -40,7 +40,7 @@ public class Rocket : MonoBehaviour {
 		{
 			if (hit && hit.rigidbody)
 			{
-				hit.rigidbody.AddExplosionForce(2.5f, explosionPos, explosionRadius, 3.0F, ForceMode.Impulse);
+				hit.rigidbody.AddExplosionForce(2.5f, explosionPos + Vector3.up, explosionRadius, 3.0F, ForceMode.Impulse);
 				if (hit.tag == "Enemy")
 				{
 					hit.GetComponent<Enemy>().AddDamage(Random.Range(minDamage, maxDamage));

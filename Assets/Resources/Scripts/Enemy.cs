@@ -72,7 +72,6 @@ public class Enemy : MonoBehaviour {
 		if (currentWaypoint >= waypointLength - 1)
 		{
 			//end of path reached
-			//Destroy(gameObject);
 
 			//debug
 			currentWaypoint = -1;
@@ -97,7 +96,17 @@ public class Enemy : MonoBehaviour {
 		Vector3 pointToMirror = normForward * Vector3.Dot(normForward, velocity);
 		Vector3 newDir = pointToMirror + pointToMirror - velocity;
 
+		//check if grounded
 
+		if (Physics.Raycast(myTransform.position + Vector3.up / 2, -transform.up, 0.8f))
+		{
+			grounded = true;
+			Debug.DrawRay(myTransform.position, -transform.up, Color.red);
+		}
+		else
+		{
+			grounded = false;
+		}
 
 		//distance check
 		float distanceToTarget = Vector3.Distance(transform.position, nextWaypoint);
@@ -110,10 +119,6 @@ public class Enemy : MonoBehaviour {
 
 			//check if target is in front
 			Vector3 target = nextWaypoint - transform.position;
-
-
-
-			float rotationSpeed = 10 * (1 - (Mathf.Clamp(velocity.magnitude / speed, 0.4f, 0.8f)));
 
 
 			//rotate tank
@@ -157,7 +162,7 @@ public class Enemy : MonoBehaviour {
 
 		} 
 	}
-
+	/*
 	void OnCollisionStay(Collision other)
 	{
 		if (other.gameObject.name == "Terrain")
@@ -172,7 +177,7 @@ public class Enemy : MonoBehaviour {
 			grounded = false;
 		}
 	}
-
+	*/
 	public void AddDamage(float damage)
 	{
 		health -= damage;
