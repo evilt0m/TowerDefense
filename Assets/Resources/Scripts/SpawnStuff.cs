@@ -46,4 +46,12 @@ public class SpawnStuff : MonoBehaviour {
 			}
 		}
 	}
+
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+			Instantiate(spawnObject, transform.position, transform.rotation);
+		}
+	}
 }

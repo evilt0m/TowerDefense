@@ -30,6 +30,10 @@ public class Enemy : MonoBehaviour {
 	private bool grounded;
 	private bool isDead;
 
+	private float timeLimit = 5f;
+	private float timeOut = 0;
+	private bool timerStarted = false;
+
 	private Material deadMaterial;
 
 	// Use this for initialization
@@ -101,11 +105,26 @@ public class Enemy : MonoBehaviour {
 		if (Physics.Raycast(myTransform.position + Vector3.up / 2, -transform.up, 0.8f))
 		{
 			grounded = true;
+			timerStarted = false;
 			Debug.DrawRay(myTransform.position, -transform.up, Color.red);
 		}
 		else
 		{
 			grounded = false;
+
+			//start timeout 
+			if (!timerStarted)
+			{
+				timerStarted = true;
+				timeOut = Time.time + timeLimit;
+			}
+			else
+			{
+				if (Time.time > timeOut)
+				{
+					AddDamage(10f * Time.deltaTime);
+				}
+			}
 		}
 
 		//distance check
