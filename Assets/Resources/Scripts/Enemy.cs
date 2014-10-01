@@ -70,6 +70,7 @@ public class Enemy : MonoBehaviour {
 				tank.renderer.material = deadMaterial;
 				turret.renderer.material = deadMaterial;
 				turret.transform.GetChild(0).renderer.material = deadMaterial;
+				rigidbody.mass = 0.5f;
 			}
 			return;
 		}
