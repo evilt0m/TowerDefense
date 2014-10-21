@@ -5,10 +5,12 @@ public class ModeControl : MonoBehaviour {
 
 	private bool buildMode = false;
 	private GameObject testBuilding;
+	private GameObject tutorial;
 
 	// Use this for initialization
 	void Start () {
 		testBuilding = Resources.Load("Prefabs/TestBuilding") as GameObject;
+		tutorial = GameObject.Find("PressA");
 	}
 	
 	// Update is called once per frame
@@ -17,6 +19,7 @@ public class ModeControl : MonoBehaviour {
 		{
 			if (Input.GetKeyDown(KeyCode.A))
 			{
+				tutorial.SetActive(false);
 				buildMode = true;
 				GameObject newBuilding = Instantiate(testBuilding) as GameObject;
 				newBuilding.GetComponent<SnapToMouse>().SetPicked();

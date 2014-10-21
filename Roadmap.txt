@@ -1,0 +1,60 @@
+Was ist Unity?
+-3D Engine
+-Tools
+
+Was kann man mit Unity machen?
+-Alles, mit der ensprechenden Übung bzw. Plugins
+
+Was wollen wir im Workshop erreichen?
+-Prototyping für Spiele
+-Editor Verständnis
+-Physics
+-Grundlegendes Scripting Game Logik
+
+Was wollen wir nicht?
+-Shader, Backend, Plugin, Toolprogrammierung
+-3D Graphics und Material Kunde
+-Level Design (terrain)
+-Character Animations
+-AI und Pathfinding
+-Mobile Builds (vielleicht am Ende, aber nur Android)
+-Google Play Store/Games
+
+Editor I
+-Layout
+-Hierarchy
+-Scene/Game View
+-Project Window
+-Inspector
+
+Editor II
+-Viewport Controls
+-Objekte platzieren und editieren
+-Assets importieren
+-Asset folder und die Strukturen im Projekt
+-Szenen
+
+Editor III
+-Parents and Childs
+-Objekte und Components
+-Scripting!
+
+Scripting I
+-Objekte per script bewegen (EnemyWIP.cs)
+-Waypoints
+-Drehen von Objekten
+
+Scripting Ia (optional, viel Mathe, aber lustig)
+-Objekte per Physics bewegen
+-Spass mit Vektoren
+
+Scripting II
+-Objekte finden und verarbeiten (FindTarget)
+-Instanzieren von Objekten
+
+Scripting III
+-Kommunikation zwischen Objekten
+-Interaktion zwischen Objekten (collision)
+-Explosionen
+-Asset Store
+
