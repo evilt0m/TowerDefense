@@ -8,7 +8,7 @@ Was kann man mit Unity machen?
 Was wollen wir im Workshop erreichen?
 -Prototyping für Spiele
 -Editor Verständnis
--Physics
+-Physics (optional)
 -Grundlegendes Scripting Game Logik
 
 Was wollen wir nicht?
@@ -30,31 +30,54 @@ Editor I
 Editor II
 -Viewport Controls
 -Objekte platzieren und editieren
+-Terrain, grob!
 -Assets importieren
 -Asset folder und die Strukturen im Projekt
+-Prefabs
 -Szenen
 
 Editor III
 -Parents and Childs
 -Objekte und Components
+-Basic Animationen (Radarschüssel vom Turm)
+-Kameratypen, Ortho, Persp
+-Lighting
+-Tags und Layer
 -Scripting!
 
 Scripting I
+-Was ist das überhaupt? Objekte, Komponenten, Attribute, Methoden?
 -Objekte per script bewegen (EnemyWIP.cs)
--Waypoints
 -Drehen von Objekten
+-movetowards
+-Waypoints, Arrays
+-Debug Log
 
-Scripting Ia (optional, viel Mathe, aber lustig)
+
+Scripting Ia (optional, Mathe, aber lustig)
+-Rigidbody, Collider
 -Objekte per Physics bewegen
+-Debug Rays
 -Spass mit Vektoren
 
 Scripting II
+-Tower
 -Objekte finden und verarbeiten (FindTarget)
 -Instanzieren von Objekten
 
 Scripting III
 -Kommunikation zwischen Objekten
 -Interaktion zwischen Objekten (collision)
--Explosionen
+-Explosionen und Partikelstaub
 -Asset Store
+
+Scripting IV
+-Game Controller
+-Türme platzieren, placement mode, grid
+
+Scripting V
+-grobe GUI für Punkte
+-Win/Loss Bedingungen
+-Szenenwechsel
+-Kamera Steuerung
 
